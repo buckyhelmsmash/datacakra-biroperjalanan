@@ -3,7 +3,7 @@ import {datacakraAxios} from "../../utils/AxiosInstance";
 import * as SecureStore from 'expo-secure-store';
 import {SESSION_TOKEN} from "../../utils/constants";
 import {AxiosResponse} from "axios";
-import {IErrorResponse, IRegisterResponse} from "../../utils/interface/NetworkResponseInterface";
+import {IErrorResponse, ILoginResponse, IRegisterResponse} from "../../utils/interface/NetworkResponseInterface";
 import {LoginParam} from "../../utils/interface/AuthInterface";
 
 interface AuthProps {
@@ -14,9 +14,12 @@ interface AuthProps {
 }
 
 const AuthContext = createContext<AuthProps>({
-    onRegister: async () =>{},
-    onLogin: async () =>{},
-    onLogout: async () =>{},
+    onRegister: async () => {
+    },
+    onLogin: async () => {
+    },
+    onLogout: async () => {
+    },
     authState: {
         token: null,
         authenticated: null
@@ -32,6 +35,9 @@ interface AuthProviderProps {
 
 interface Auth {
     token: string | null,
+    email: string | null,
+    name: string | null,
+    id: string | null,
     authenticated: boolean | null
 }
 
@@ -39,21 +45,34 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
     const [authState, setAuthState] = useState<Auth>(
         {
             token: null,
+            email: null,
+            name: null,
+            id: null,
             authenticated: null
         }
     );
 
     useEffect(() => {
-        const loadToken = async  () => {
-            const token = await SecureStore.getItemAsync(SESSION_TOKEN)
+        const loadToken = async () => {
+            try {
+                const session = await SecureStore.getItemAsync(SESSION_TOKEN)
+                console.log("🌍 session", session)
+                if (session != null) {
+                    const {Token: token, Name: name, Email: email, Id: id} = JSON.parse(session)
 
-            if(token){
-                datacakraAxios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+                    datacakraAxios.defaults.headers.common['Authorization'] = `Bearer ${token}`
 
-                setAuthState({
-                    token: token,
-                    authenticated: true
-                })
+                    setAuthState({
+                        token: token,
+                        name: name,
+                        email: email,
+                        id: id,
+                        authenticated: true
+                    })
+
+                }
+            } catch (e) {
+                console.log("🌍 error load session", e)
             }
         }
         loadToken()
@@ -70,22 +89,33 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
     const login = async (param: LoginParam): Promise<IErrorResponse | undefined> => {
         const {email, password} = param
         try {
-             const result = await datacakraAxios.post('/authaccount/login', {email, password})
+            const result: AxiosResponse<ILoginResponse> = await datacakraAxios.post('/authaccount/login', {email, password})
 
-            console.log("🌍 login", result?.data.data.Token)
+            console.log("🌍 login", result?.data.data)
 
-            const token = result?.data.data.Token
-
-            console.log("🌍 token", token)
+            const {Token: token, Name: name, Email: emailStorage, Id: id} = result?.data.data
 
             setAuthState({
                 token: token,
+                name: name,
+                email: emailStorage,
+                id: id,
                 authenticated: true
             })
 
             datacakraAxios.defaults.headers.common['Authorization'] = `Bearer ${token}`
 
-            await SecureStore.setItemAsync(SESSION_TOKEN, token)
+            await SecureStore.setItemAsync(
+                SESSION_TOKEN,
+                JSON.stringify(
+                    {
+                        token,
+                        name,
+                        email,
+                        id
+                    }
+                )
+            )
 
         } catch (e) {
             return {error: true, message: (e as any).response.data.message}
@@ -99,6 +129,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
 
         setAuthState({
             token: null,
+            id: null,
+            email: null,
+            name: null,
             authenticated: null
         })
     }
