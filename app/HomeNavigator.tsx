@@ -34,6 +34,7 @@ const HomeNavigator:  React.FC<RootStackNavigationProp<'HomeNavigator'>>  = () =
                 name={"TouristNavigator"}
                 component={TouristsNavigator}
                 options={{
+                    tabBarLabel: "Tourists",
                     tabBarIcon: ({focused}) => {
                         if(focused) return <IonIcon name={"airplane"} size={26} color={theme.palette.primary.main}/>
                         else return<IonIcon name={"airplane-outline"} size={26} color={"gray"}/>
