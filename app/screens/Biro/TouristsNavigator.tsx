@@ -1,11 +1,14 @@
 import React from 'react';
 import {useTheme} from "@react-native-material/core";
-import {createNativeStackNavigator} from "@react-navigation/native-stack";
-import Login from "../Login";
+import {createNativeStackNavigator, NativeStackScreenProps} from "@react-navigation/native-stack";
 import Tourists from "./Tourists";
+import TouristDetail from "./TouristDetail";
+import {TouristStackParamList} from "../../../utils/interface/Navigation";
 
 
-const Stack = createNativeStackNavigator()
+
+
+const Stack = createNativeStackNavigator<TouristStackParamList>()
 
 const TouristsNavigator = () => {
     const theme = useTheme()
@@ -18,10 +21,13 @@ const TouristsNavigator = () => {
             }}
         >
             <Stack.Screen
-                name={"Biro"}
+                name={"Tourist"}
                 component={Tourists}
             />
-
+            <Stack.Screen
+                name={"TouristDetail"}
+                component={TouristDetail}
+            />
         </Stack.Navigator>
     );
 };

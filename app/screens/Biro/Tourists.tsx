@@ -1,28 +1,13 @@
 import React from 'react';
 import {FlatList} from 'react-native';
-import {Avatar, Button, Flex, ListItem} from "@react-native-material/core";
+import {Avatar, Button, Flex, ListItem, Text} from "@react-native-material/core";
 import {useInfiniteQuery} from "@tanstack/react-query";
 import {datacakraAxios} from "../../../utils/AxiosInstance";
+import {Tourist, TouristListResponse} from "../../../utils/interface/NetworkResponseInterface";
+import {TouristStackNavigationProp} from "../../../utils/interface/Navigation";
 
-interface Tourist {
-    $id: string;
-    createdat: string;
-    id: string;
-    tourist_email: string;
-    tourist_location: string;
-    tourist_name: string;
-    tourist_profilepicture: string;
-}
 
-interface TouristListResponse {
-    data: Tourist[];
-    page: string;
-    per_page: number;
-    total_pages: number;
-    totalrecord: number;
-}
-
-const Tourists = () => {
+const Tourists: React.FC<TouristStackNavigationProp<'Tourist'>> = ({navigation}) => {
 
     const {data, fetchNextPage, hasNextPage, isFetching} = useInfiniteQuery<TouristListResponse>({
         queryKey: ['listtourist'],
@@ -43,14 +28,18 @@ const Tourists = () => {
         await fetchNextPage();
     };
 
-    const renderItem = ({item}: { item: Tourist }) => (
+    const renderItem = ({item, index}: { item: Tourist; index: number }) => (
         <ListItem
             leadingMode="avatar"
             leading={
                 <Avatar image={{uri: item.tourist_profilepicture}}/>
             }
+            trailing={
+                <Text>{index + 1}</Text>
+            }
             title={item.tourist_name}
             secondaryText={item.tourist_location}
+            onPress={() => navigation.navigate('TouristDetail', {id: item.id})}
         />
     );
 
@@ -58,7 +47,7 @@ const Tourists = () => {
         <Flex fill>
             <FlatList
                 data={data?.pages.flatMap((page) => page.data) || []}
-                renderItem={renderItem}
+                renderItem={({item, index}) => renderItem({item, index})}
                 keyExtractor={(item) => item.id}
                 ListFooterComponent={
                     hasNextPage ? (

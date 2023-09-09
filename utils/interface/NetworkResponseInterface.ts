@@ -30,3 +30,22 @@ export interface IRegister {
 export interface IRegisterResponse extends IAuthResponse {
     data: IRegister
 }
+
+
+export interface Tourist {
+    $id: string;
+    createdat: string;
+    id: string;
+    tourist_email: string;
+    tourist_location: string;
+    tourist_name: string;
+    tourist_profilepicture: string;
+}
+
+export interface TouristListResponse {
+    data: Tourist[];
+    page: string;
+    per_page: number;
+    total_pages: number;
+    totalrecord: number;
+}

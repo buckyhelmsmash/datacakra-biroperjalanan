@@ -1,55 +1,44 @@
 import React from 'react';
-import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
-import MaterialIcon  from "@expo/vector-icons/MaterialCommunityIcons";
-import FontAwesomeIcon  from "@expo/vector-icons/FontAwesome";
-import IonIcon  from "@expo/vector-icons/Ionicons";
+import {createMaterialBottomTabNavigator, MaterialBottomTabScreenProps} from '@react-navigation/material-bottom-tabs';
+import FontAwesomeIcon from "@expo/vector-icons/FontAwesome";
+import IonIcon from "@expo/vector-icons/Ionicons";
 import Home from "./screens/Home";
 import {useTheme} from "@react-native-material/core";
 import Tourists from "./screens/Biro/Tourists";
+import {HomeBottomTabParamList, RootStackNavigationProp} from "../utils/interface/Navigation";
+import TouristsNavigator from "./screens/Biro/TouristsNavigator";
 
-const Tab = createMaterialBottomTabNavigator()
 
-const HomeNavigator = () => {
+
+const Tab = createMaterialBottomTabNavigator<HomeBottomTabParamList >()
+
+const HomeNavigator:  React.FC<RootStackNavigationProp<'HomeNavigator'>>  = () => {
     const theme = useTheme()
 
-    const bottomMenu = [
-        {
-            route: "Home",
-            label: "Home",
-            activeIcon: <FontAwesomeIcon name={"user-circle"} size={26} color={theme.palette.primary.main}/>,
-            inActiveIcon: <FontAwesomeIcon name={"user-circle-o"} size={26} color={"gray"}/>,
-            component: Home
-        },
-        {
-            route: "Biro",
-            label: "Biro",
-            activeIcon: <IonIcon name={"airplane"} size={26} color={theme.palette.primary.main}/>,
-            inActiveIcon: <IonIcon name={"airplane-outline"} size={26} color={"gray"}/>,
-            component: Tourists
-        }
-    ]
     return (
         <Tab.Navigator
             initialRouteName={"Home"}
             activeColor={theme.palette.primary.main}
             inactiveColor={"gray"}
         >
-            {bottomMenu.map((item, index) => {
-                return(
-                    <Tab.Screen
-                        key={index}
-                        name={item.route}
-                        component={item.component}
-                        options={{
-                            tabBarLabel: undefined,
-                            tabBarIcon: ({focused}) => {
-                                if(focused) return item.activeIcon
-                                else return item.inActiveIcon
-                            }
-                        }}
-                    />
-                )
-            })}
+            <Tab.Screen
+                name={"Home"}
+                component={Home}
+                options={{
+                    tabBarIcon: ({focused}) => {
+                        if(focused) return <FontAwesomeIcon name={"user-circle"} size={26} color={theme.palette.primary.main}/>
+                        else return<FontAwesomeIcon name={"user-circle-o"} size={26} color={"gray"}/>
+                }}}
+            />
+            <Tab.Screen
+                name={"TouristNavigator"}
+                component={TouristsNavigator}
+                options={{
+                    tabBarIcon: ({focused}) => {
+                        if(focused) return <IonIcon name={"airplane"} size={26} color={theme.palette.primary.main}/>
+                        else return<IonIcon name={"airplane-outline"} size={26} color={"gray"}/>
+                    }}}
+            />
         </Tab.Navigator>
     );
 };

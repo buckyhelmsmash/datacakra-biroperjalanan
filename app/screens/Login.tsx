@@ -7,8 +7,9 @@ import {Controller, useForm} from "react-hook-form";
 import {LoginParam} from "../../utils/interface/AuthInterface";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import {useMutation} from "@tanstack/react-query";
+import {RootStackNavigationProp} from "../../utils/interface/Navigation";
 
-const Login = () => {
+const Login: React.FC<RootStackNavigationProp<'Login'>> = () => {
     const {onLogin} = useAuth()
     const {mutateAsync, isLoading} = useMutation({
         mutationKey: ["login"],
@@ -78,6 +79,17 @@ const Login = () => {
                 <Button
                     title="Login"
                     onPress={onSubmit}
+                    loading={isLoading}
+                />
+            </Flex>
+            <Flex center>
+                <Text >or</Text>
+            </Flex>
+            <Flex>
+                <Button
+                    variant={"text"}
+                    title="Register"
+                    // onPress={onSubmit}
                     loading={isLoading}
                 />
             </Flex>
