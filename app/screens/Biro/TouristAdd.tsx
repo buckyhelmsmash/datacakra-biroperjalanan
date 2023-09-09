@@ -36,9 +36,6 @@ const TouristAdd: React.FC<TouristStackNavigationProp<'TouristAdd'>> = ({navigat
 
     return (
         <Flex fill style={{margin: 16, gap: 18}}>
-            {/*<Flex center>*/}
-            {/*    <Avatar image={{uri: touristDetail?.tourist_profilepicture}} size={100}/>*/}
-            {/*</Flex>*/}
             <Flex>
                 <Controller
                     name={"tourist_name"}

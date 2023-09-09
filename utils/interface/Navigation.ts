@@ -5,6 +5,7 @@ import {MaterialBottomTabScreenProps} from "@react-navigation/material-bottom-ta
 export type RootStackParamList = {
     HomeNavigator: undefined;
     Login: undefined;
+    Register: undefined;
 };
 
 export type RootStackNavigationProp<

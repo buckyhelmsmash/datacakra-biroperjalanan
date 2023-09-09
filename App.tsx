@@ -1,14 +1,12 @@
 import {AuthProvider, useAuth} from "./app/context/AuthContext";
-import {
-    createNativeStackNavigator,
-    NativeStackScreenProps
-} from "@react-navigation/native-stack";
+import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import {NavigationContainer} from "@react-navigation/native";
 import HomeNavigator from "./app/HomeNavigator";
 import Login from "./app/screens/Login";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
-import {Button, useTheme} from "@react-native-material/core";
+import {useTheme} from "@react-native-material/core";
 import {RootStackParamList} from "./utils/interface/Navigation";
+import Register from "./app/screens/Register";
 
 const queryClient = new QueryClient({
     defaultOptions: {queries: {retry: 2}},
@@ -23,7 +21,6 @@ export default function App() {
         </AuthProvider>
     );
 }
-
 
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
@@ -48,13 +45,22 @@ export const Layout = () => {
                             />
                         )
                         : (
-                            <Stack.Screen
-                                name={"Login"}
-                                component={Login}
-                                options={{
-                                    statusBarColor: theme.palette.primary.main
-                                }}
-                            />
+                            <>
+                                <Stack.Screen
+                                    name={"Login"}
+                                    component={Login}
+                                    options={{
+                                        statusBarColor: theme.palette.primary.main
+                                    }}
+                                />
+                                <Stack.Screen
+                                    name={"Register"}
+                                    component={Register}
+                                    options={{
+                                        statusBarColor: theme.palette.primary.main
+                                    }}
+                                />
+                            </>
                         )
                 }
             </Stack.Navigator>
