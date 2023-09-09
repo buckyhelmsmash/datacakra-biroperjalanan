@@ -2,9 +2,9 @@ import React from 'react';
 
 import {useAuth} from "../context/AuthContext";
 import {Button, Flex, Spacer, Text} from "@react-native-material/core";
-import {RootStackNavigationProp} from "../../App";
+import {HomeBottomTabNavigationProp} from "../../utils/interface/Navigation";
 
-const Home= () => {
+const Home: React.FC<HomeBottomTabNavigationProp<'Home'>>  = () => {
     const {authState, onLogout} = useAuth()
     return (
         <Flex fill style={{margin: 16, gap: 12}}>

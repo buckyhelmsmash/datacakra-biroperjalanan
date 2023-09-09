@@ -25,6 +25,7 @@ export type HomeBottomTabNavigationProp<
 // TOURIST
 export type TouristStackParamList = {
     Tourist: undefined,
+    TouristAdd: undefined,
     TouristDetail: { id: string }
 }
 

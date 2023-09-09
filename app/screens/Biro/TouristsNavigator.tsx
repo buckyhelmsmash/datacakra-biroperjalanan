@@ -1,18 +1,16 @@
 import React from 'react';
 import {useTheme} from "@react-native-material/core";
-import {createNativeStackNavigator, NativeStackScreenProps} from "@react-navigation/native-stack";
+import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import Tourists from "./Tourists";
+import TouristAdd from "./TouristAdd";
 import TouristDetail from "./TouristDetail";
-import {TouristStackParamList} from "../../../utils/interface/Navigation";
-
-
+import {HomeBottomTabNavigationProp, TouristStackParamList} from "../../../utils/interface/Navigation";
 
 
 const Stack = createNativeStackNavigator<TouristStackParamList>()
 
-const TouristsNavigator = () => {
+const TouristsNavigator: React.FC<HomeBottomTabNavigationProp<'TouristNavigator'>> = ({navigation}) => {
     const theme = useTheme()
-
 
     return (
         <Stack.Navigator
@@ -23,6 +21,10 @@ const TouristsNavigator = () => {
             <Stack.Screen
                 name={"Tourist"}
                 component={Tourists}
+            />
+            <Stack.Screen
+                name={"TouristAdd"}
+                component={TouristAdd}
             />
             <Stack.Screen
                 name={"TouristDetail"}

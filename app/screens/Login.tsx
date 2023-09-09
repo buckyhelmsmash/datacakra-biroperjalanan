@@ -25,8 +25,8 @@ const Login: React.FC<RootStackNavigationProp<'Login'>> = () => {
 
     const onSubmit = handleSubmit(async data => {
         await mutateAsync(data)
-
     })
+
     return (
         <Flex fill style={{margin: 16, gap: 18}}>
             <Flex>

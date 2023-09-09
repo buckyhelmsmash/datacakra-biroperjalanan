@@ -1,15 +1,30 @@
-import React from 'react';
+import React, {useLayoutEffect} from 'react';
 import {FlatList} from 'react-native';
 import {Avatar, Button, Flex, ListItem, Text} from "@react-native-material/core";
 import {useInfiniteQuery} from "@tanstack/react-query";
 import {datacakraAxios} from "../../../utils/AxiosInstance";
 import {Tourist, TouristListResponse} from "../../../utils/interface/NetworkResponseInterface";
 import {TouristStackNavigationProp} from "../../../utils/interface/Navigation";
+import {useFocusEffect} from "@react-navigation/native";
 
 
 const Tourists: React.FC<TouristStackNavigationProp<'Tourist'>> = ({navigation}) => {
 
-    const {data, fetchNextPage, hasNextPage, isFetching} = useInfiniteQuery<TouristListResponse>({
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerRight: props => {
+
+                return(
+                    <Button
+                        title={"Add Tourist"}
+                        onPress={() => navigation.navigate('TouristAdd')}
+                    />
+                )
+            }
+        });
+    }, [navigation]);
+
+    const {data, fetchNextPage, hasNextPage, isFetching, refetch} = useInfiniteQuery<TouristListResponse>({
         queryKey: ['listtourist'],
         queryFn: async ({pageParam = 1}) => {
             const result = await datacakraAxios.get<TouristListResponse>(`/Tourist?page=${pageParam}`);
@@ -22,6 +37,10 @@ const Tourists: React.FC<TouristStackNavigationProp<'Tourist'>> = ({navigation})
             }
             return undefined;
         }
+    })
+
+    useFocusEffect(() => {
+        refetch()
     })
 
     const loadMore = async () => {
