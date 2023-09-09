@@ -1,14 +1,17 @@
 import React from 'react';
 
-import {Text, View} from 'react-native';
 import {useAuth} from "../context/AuthContext";
+import {Button, Flex, Spacer, Text} from "@react-native-material/core";
 
 const Home = () => {
-    const {authState} = useAuth()
+    const {authState, onLogout} = useAuth()
     return (
-        <Text>
-            {authState.token}
-        </Text>
+        <Flex fill style={{margin: 16, gap: 12}}>
+            <Text variant="h6">Nama: {authState.name}</Text>
+            <Text variant="h6">Email: {authState.email}</Text>
+            <Spacer/>
+            <Button title={"Logout"} onPress={() => onLogout()}/>
+        </Flex>
     );
 };
 

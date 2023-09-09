@@ -1,4 +1,4 @@
-import {createContext, ReactNode, useContext, useEffect, useState} from "react";
+import React, {createContext, ReactNode, useContext, useEffect, useState} from "react";
 import {datacakraAxios} from "../../utils/AxiosInstance";
 import * as SecureStore from 'expo-secure-store';
 import {SESSION_TOKEN} from "../../utils/constants";
@@ -6,8 +6,17 @@ import {AxiosResponse} from "axios";
 import {IErrorResponse, ILoginResponse, IRegisterResponse} from "../../utils/interface/NetworkResponseInterface";
 import {LoginParam} from "../../utils/interface/AuthInterface";
 
+
+interface Auth {
+    token: string | null,
+    email: string | null,
+    name: string | null,
+    id: string | null,
+    authenticated: boolean | null
+}
+
 interface AuthProps {
-    authState: { token: string | null; authenticated: boolean | null },
+    authState: Auth,
     onRegister: (email: string, password: string, name: string) => Promise<any>,
     onLogin: (param: LoginParam) => Promise<any>,
     onLogout: () => Promise<any>
@@ -22,6 +31,9 @@ const AuthContext = createContext<AuthProps>({
     },
     authState: {
         token: null,
+        id: null,
+        email: null,
+        name: null,
         authenticated: null
     }
 })
@@ -33,13 +45,6 @@ interface AuthProviderProps {
     children: ReactNode
 }
 
-interface Auth {
-    token: string | null,
-    email: string | null,
-    name: string | null,
-    id: string | null,
-    authenticated: boolean | null
-}
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
     const [authState, setAuthState] = useState<Auth>(
@@ -56,17 +61,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
         const loadToken = async () => {
             try {
                 const session = await SecureStore.getItemAsync(SESSION_TOKEN)
-                console.log("🌍 session", session)
-                if (session != null) {
-                    const {Token: token, Name: name, Email: email, Id: id} = JSON.parse(session)
 
-                    datacakraAxios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+                if (session != null) {
+                    const trueSession = JSON.parse(session)
+
+                    datacakraAxios.defaults.headers.common['Authorization'] = `Bearer ${trueSession.token}`
 
                     setAuthState({
-                        token: token,
-                        name: name,
-                        email: email,
-                        id: id,
+                        token: trueSession.token,
+                        name: trueSession.name,
+                        email: trueSession.email,
+                        id: trueSession.id,
                         authenticated: true
                     })
 

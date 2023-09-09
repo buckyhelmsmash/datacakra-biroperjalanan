@@ -1,7 +1,7 @@
 import {AuthProvider, useAuth} from "./app/context/AuthContext";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import {NavigationContainer} from "@react-navigation/native";
-import Home from "./app/screens/Home";
+import HomeNavigator from "./app/HomeNavigator";
 import Login from "./app/screens/Login";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {Button, useTheme} from "@react-native-material/core";
@@ -30,7 +30,7 @@ export const Layout = () => {
         <NavigationContainer>
             <Stack.Navigator
                 screenOptions={{
-                    statusBarStyle: "dark",
+                    // statusBarStyle: "dark",
                     statusBarColor: theme.palette.primary.main
                 }}
             >
@@ -38,10 +38,10 @@ export const Layout = () => {
                     authState?.authenticated
                         ? (
                             <Stack.Screen
-                                name={"Home"}
-                                component={Home}
+                                name={"HomeNavigator"}
+                                component={HomeNavigator}
                                 options={{
-                                    headerRight: () => <Button onPress={onLogout} title={"Sign Out"}/>
+                                    headerShown: false
                                 }}
                             />
                         )
@@ -49,7 +49,6 @@ export const Layout = () => {
                             <Stack.Screen
                                 name={"Login"}
                                 component={Login}
-
                             />
                         )
                 }

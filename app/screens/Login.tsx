@@ -59,7 +59,7 @@ const Login = () => {
                             secureTextEntry={showPassword}
                             trailing={
                                 <IconButton
-                                    icon={<Icon name={!showPassword ? "eye-off" : "eye"} size={25}/>}
+                                    icon={<Icon name={showPassword ? "eye-off" : "eye"} size={25}/>}
                                     onPress={() => setShowPassword(!showPassword)}
                                 />
                             }
