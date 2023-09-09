@@ -5,11 +5,12 @@ import FontAwesomeIcon  from "@expo/vector-icons/FontAwesome";
 import IonIcon  from "@expo/vector-icons/Ionicons";
 import Home from "./screens/Home";
 import {useTheme} from "@react-native-material/core";
-import Biro from "./screens/Biro/Biro";
+import Tourists from "./screens/Biro/Tourists";
+
+const Tab = createMaterialBottomTabNavigator()
 
 const HomeNavigator = () => {
     const theme = useTheme()
-    const Tab = createMaterialBottomTabNavigator()
 
     const bottomMenu = [
         {
@@ -24,7 +25,7 @@ const HomeNavigator = () => {
             label: "Biro",
             activeIcon: <IonIcon name={"airplane"} size={26} color={theme.palette.primary.main}/>,
             inActiveIcon: <IonIcon name={"airplane-outline"} size={26} color={"gray"}/>,
-            component: Biro
+            component: Tourists
         }
     ]
     return (
